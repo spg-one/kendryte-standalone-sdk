@@ -54,6 +54,15 @@
         "xlocnum": "cpp",
         "xmemory": "cpp",
         "xstddef": "cpp",
-        "xtr1common": "cpp"
+        "xtr1common": "cpp",
+        "multiCommand.commands": [
+            {
+                "command": "multiCommand.enterExec",
+                "sequence": [
+                    "repl.action.acceptInput",
+                    {"command": "editor.action.insertSnippet", "args": {"snippet": "-exec "}}
+                ]
+            }
+        ]
     }
 }

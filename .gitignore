@@ -224,10 +224,6 @@ modules.xml
 
 # Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-249601023
 
-### VSCode ###
-.vscode/*
-!.vscode/settings.json
-
 ### KDevelop4 ###
 *.kdev4
 .kdev4/
@@ -811,7 +807,6 @@ kendryte-standlone-sdk.si4project/
 
 kendryte-standalone-demo
 kendryte-standalone-demo-bak
-src/
-!src/hello_world
+
 /CMakeSettings.json
 /build_i
