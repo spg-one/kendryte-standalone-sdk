@@ -55,14 +55,36 @@
         "xmemory": "cpp",
         "xstddef": "cpp",
         "xtr1common": "cpp",
-        "multiCommand.commands": [
-            {
-                "command": "multiCommand.enterExec",
-                "sequence": [
-                    "repl.action.acceptInput",
-                    {"command": "editor.action.insertSnippet", "args": {"snippet": "-exec "}}
-                ]
-            }
-        ]
-    }
+        "bit": "cpp",
+        "compare": "cpp",
+        "atomic": "cpp",
+        "*.tcc": "cpp",
+        "cctype": "cpp",
+        "clocale": "cpp",
+        "cstdarg": "cpp",
+        "ctime": "cpp",
+        "cwctype": "cpp",
+        "deque": "cpp",
+        "functional": "cpp",
+        "memory_resource": "cpp",
+        "numeric": "cpp",
+        "random": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "sstream": "cpp"
+    },
+    "multiCommand.commands": [
+        {
+            "command": "multiCommand.enterExec",
+            "sequence": [
+                "repl.action.acceptInput",
+                {
+                    "command": "editor.action.insertSnippet",
+                    "args": {
+                        "snippet": "-exec "
+                    }
+                }
+            ]
+        }
+    ]
 }
