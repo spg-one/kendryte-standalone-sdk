@@ -9,7 +9,7 @@
       "type": "cppdbg",
       "cwd": "${workspaceFolder}",
       "request": "launch",
-      "program": "${workspaceFolder}/build/kpu_iris_example",
+      "program": "${workspaceFolder}/build/camera_lcd",
       "stopAtEntry": true,
       "filterStderr": true,
       "setupCommands": [
@@ -29,7 +29,7 @@
           "ignoreFailures": false
         },
         {
-          "text": "-file-exec-and-symbols C:/Users/spggo/Documents/kendryte-standalone-sdk/build/kpu_iris_example",
+          "text": "-file-exec-and-symbols C:/Users/spggo/Documents/kendryte-standalone-sdk/build/camera_lcd",
           "description": "load file",
           "ignoreFailures": false
         },
@@ -40,7 +40,7 @@
         }
       ],
       "logging": {
-        "engineLogging": false,
+        "engineLogging": true,
         "programOutput": true,
       },
       "MIMode": "gdb",

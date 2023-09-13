@@ -71,7 +71,13 @@
         "random": "cpp",
         "string": "cpp",
         "string_view": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "gc0328.h": "c",
+        "lcd_sipeed.h": "c",
+        "unistd.h": "c",
+        "fpioa.h": "c",
+        "system_config.h": "c",
+        "lcd.h": "c"
     },
     "multiCommand.commands": [
         {
@@ -86,5 +92,8 @@
                 }
             ]
         }
-    ]
+    ],
+    "cmake.configureArgs": [
+        "-DPROJ=camera_lcd"
+    ],
 }

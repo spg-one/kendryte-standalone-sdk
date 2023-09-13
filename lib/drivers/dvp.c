@@ -213,6 +213,7 @@ void dvp_set_ai_addr(uint32_t r_addr, uint32_t g_addr, uint32_t b_addr)
 
 void dvp_set_display_addr(uint32_t addr)
 {
+    printf("%u\n",addr);
 #if FIX_CACHE
     configASSERT(!is_memory_cache((uintptr_t)addr));
 #endif
