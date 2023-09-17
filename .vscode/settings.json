@@ -77,7 +77,8 @@
         "unistd.h": "c",
         "fpioa.h": "c",
         "system_config.h": "c",
-        "lcd.h": "c"
+        "lcd.h": "c",
+        "font.h": "c"
     },
     "multiCommand.commands": [
         {

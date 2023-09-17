@@ -89,26 +89,6 @@ static void io_init(void)
     fpioa_set_function(LCD_RST_PIN, FUNC_GPIOHS0 + LCD_RST_IO);
 
     sysctl_set_spi0_dvp_data(1);
-
-    /* LCD Backlight */
-    fpioa_set_function(LCD_BLIGHT_PIN, FUNC_GPIOHS0 + LCD_BLIGHT_IO);
-    gpiohs_set_drive_mode(LCD_BLIGHT_IO, GPIO_DM_OUTPUT);
-    gpiohs_set_pin(LCD_BLIGHT_IO, GPIO_PV_LOW);
-
-#if(BOARD_VERSION == BOARD_V1_3)
-    /* KEY IO map and function settings */
-    fpioa_set_function(KEY_PIN, FUNC_GPIOHS0 + KEY_IO);
-    gpiohs_set_drive_mode(KEY_IO, GPIO_DM_INPUT_PULL_UP);
-    gpiohs_set_pin_edge(KEY_IO, GPIO_PE_FALLING);
-    gpiohs_irq_register(KEY_IO, 1, key_trigger, NULL);
-
-    /* pwm IO.*/
-    fpioa_set_function(LED_IR_PIN, FUNC_TIMER0_TOGGLE2 + 1 * 4);
-    /* Init PWM */
-    pwm_init(1);
-    pwm_set_frequency(1, 1, 3000, 0.3);
-    pwm_set_enable(1, 1, 0);
-#endif
 }
 
 static void io_set_power(void)
@@ -126,7 +106,10 @@ int main(void)
     sysctl_pll_set_freq(SYSCTL_PLL2, 45158400UL);
     uarths_init();
 
-    plic_init();
+    /*SPG 初始化外部中断的优先级、CPU中断阈值，清除所有中断挂起标志*/
+    plic_init(); 
+
+    /*初始化DVP和LCD引脚*/
     io_init();
     io_set_power();
 
@@ -136,27 +119,16 @@ int main(void)
     lcd_set_direction(DIR_YX_RLDU);
     lcd_clear(BLUE);
 
-    // g_lcd_gram = (uint32_t *)iomem_malloc(320 * 240 * 2);
-    // for(int i = 0; i < (320 * 240) / 2; i++)
-    // {
-    //     g_lcd_gram[i] = 0;
-    // }
-
-    // for(int i = (320 * 240) / 2; i < 320 * 240; i++)
-    // {
-    //     g_lcd_gram[i] = 1;
-    // }
-
     /* DVP init */
     printf("DVP init\n");
-    dvp_init(8);
-    dvp_set_xclk_rate(24000000);
+    dvp_init(8); //SPG 这里完成了对dvp接口中像素输出速率时钟pclk和控制信号时钟scl的初始化
+    dvp_set_xclk_rate(24000000); //SPG 设置dvp接口的输入基准时钟信号xclk来自于apb总线频率，xclk就是上面scl和pclk的基准
     dvp_enable_burst();
     dvp_set_output_enable(0, 1);
     dvp_set_output_enable(1, 1);
-    dvp_set_image_format(DVP_CFG_RGB_FORMAT);
+    dvp_set_image_format(DVP_CFG_RGB_FORMAT); //SPG 指定dvp接收到的图像格式为16位的RGB565，这样接收到320*240*16这么多位数据后就可以产生一个中断DVP_STS_FRAME_FINISH表示一帧完成
 
-    dvp_set_image_size(320, 240);
+    dvp_set_image_size(320, 240); //SPG上面320*240的来源
 
     gc0328_init();
     open_gc0328_0();
@@ -178,21 +150,9 @@ int main(void)
     /* system start */
     printf("system start\n");
     g_dvp_finish_flag = 0;
-#if(BOARD_VERSION == BOARD_V1_3)
-    tick_init(TICK_NANOSECONDS);
-#endif
-    // for(int i = 0;i<320*240;i++){
-    //     printf("%u,", g_lcd_gram[i]);
-    // }
+
     while(1)
     {
-// #if(BOARD_VERSION == BOARD_V1_3)
-//         if(KEY_PRESS == key_get())
-//         {
-//             camera_switch();
-//         }
-// #endif
-
         dvp_clear_interrupt(DVP_STS_FRAME_START | DVP_STS_FRAME_FINISH);
         dvp_config_interrupt(DVP_CFG_START_INT_ENABLE | DVP_CFG_FINISH_INT_ENABLE, 1);
 
@@ -203,6 +163,5 @@ int main(void)
        
         lcd_draw_picture(0, 0, 320, 240, g_lcd_gram);
     }
-    // lcd_draw_picture(0, 0, 320, 240, g_lcd_gram);
     return 0;
 }
